@@ -164,7 +164,6 @@ The `_DocumentationVersion` attribute will be added automatically by UpdateDocFx
 ````
 DocFx allows the custom attributes which are defined in the `globalMetadata` section
 to be picked up inside of the template files. Using the `{{{attributeName}}}` syntax, these values can be used inside of DocFx markup files.
-<br/>
 
 #### 2. Add markup to DocFx navbar template file:
 
@@ -207,7 +206,6 @@ The [complete file](doc/navbar.tmpl.partial) will look like this:
   </div>
 </nav>
 ````
-<br/>
 
 #### 3. Add markup to DocFx footer template file:
 
@@ -246,7 +244,6 @@ The [complete file](doc/footer.tmpl.partial) will look like this:
 </footer>
 
 ````
-<br/>
 
 #### 4. Add css to DocFx main.css file
 
