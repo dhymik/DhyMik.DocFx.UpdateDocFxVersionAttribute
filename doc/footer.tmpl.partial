@@ -1,6 +1,6 @@
 {{!Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See LICENSE file in the project root for full license information.}}
 
-// modified file 'footer.tmpl.partial' with markup to display version link:
+// modified file 'footer.tmpl.partial' from DocFx 'default' template with markup to display version link:
 
 <footer>
   <div class="grad-bottom"></div>
