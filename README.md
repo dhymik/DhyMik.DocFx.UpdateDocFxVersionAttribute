@@ -130,6 +130,8 @@ Here is a fully working example for how to display version information. This exa
 a link into the auto-generated header and the footer. The link displays the current version
 and links to a version file which can also be defined inside docfx.json, along with a link hint text.
 
+The example markup is based on the DocFx `default` template.
+
 #### 1. Add link metadata to docfx.json:
 Manually add 2 new custom attributes to the `globalMetadata` section of docfx.json:
 - `_DocumentationVersionFilePath`:  
