@@ -1,0 +1,22 @@
+﻿<Project>
+
+  <UsingTask TaskName="DhyMik.DocFx.UpdateDocFxVersionAttributeTask" AssemblyFile="..\tool\DhyMik.DocFx.UpdateDocFxVersionAttributeTask.dll" />
+
+  <PropertyGroup>
+
+    <!-- 'UpdateDocFxVersionAttributeTask_DllPath' can be overridden. Default is currently built dll -->
+    <UpdateDocFxVersionAttributeTask_DllPath Condition=" '$(UpdateDocFxVersionAttributeTask_DllPath)' == '' ">$(TargetPath)</UpdateDocFxVersionAttributeTask_DllPath>
+
+    <!-- 'UpdateDocFxVersionAttributeTask_DocFxJsonPath' can be overridden. Default is 'docfx.json' -->
+    <UpdateDocFxVersionAttributeTask_DocFxJsonPath Condition=" '$(UpdateDocFxVersionAttributeTask_DocFxJsonPath)' == '' ">docfx.json</UpdateDocFxVersionAttributeTask_DocFxJsonPath>
+
+  </PropertyGroup>
+  
+  <!-- BeforeTargets="DocBuild" - this ensures that this target updates docfx.json before DocFx runs -->
+  <!-- If DocFx has been disabled by setting 'BuildDocFx' to false, this target will also be skipped -->
+
+  <Target Name="UpdateDocFxVersionAttribute" AfterTargets="Build" BeforeTargets="DocBuild" Condition="'$(BuildDocFx)' == 'true'">
+    <UpdateDocFxVersionAttributeTask DllPath="$(UpdateDocFxVersionAttributeTask_DllPath)" />
+  </Target>
+
+</Project>

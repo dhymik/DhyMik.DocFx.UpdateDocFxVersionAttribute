@@ -1,0 +1,65 @@
+﻿<Project>
+  <!--
+    If you want to use this file, rename it to ' directory.build.targets' and place it
+    in the project directory, or in any directory above. It will be picked up by MSBuild.
+    You may have to close and reopen the project for this to work.
+  -->
+
+  <!--
+    Uncomment the following section to override 'UpdateDocFxVersionAttribute' target to change how
+    the target is being called or to disable the target alltogether
+  -->
+  <!--
+  <Target Name="UpdateDocFxVersionAttribute" AfterTargets="Build" BeforeTargets="DocBuild">
+    <UpdateDocFxVersionAttributeTask DllPath="$(UpdateDocFxVersionAttributeTask_DllPath)" />
+  </Target>
+  -->
+
+  <PropertyGroup>
+
+    <!-- 
+      'UpdateDocFxVersionAttributeTask_DllPath' can be overridden. Default is currently built dll
+      Uncomment and adjust the following section to override 'UpdateDocFxVersionAttributeTask_DllPath'
+    -->
+    <!--
+    <UpdateDocFxVersionAttributeTask_DllPath>bin\release\myApp.dll</UpdateDocFxVersionAttributeTask_DllPath>
+    -->
+
+    <!--
+      'UpdateDocFxVersionAttributeTask_DocFxJsonPath' can be overridden. Default is 'docfx.json'
+      Uncomment and adjust the following section to override 'UpdateDocFxVersionAttributeTask_DocFxJsonPath'
+    -->
+    <!--
+    <UpdateDocFxVersionAttributeTask_DocFxJsonPath>..\..\MySeparateDocFxProject\docfx.json</UpdateDocFxVersionAttributeTask_DocFxJsonPath>
+    -->
+
+  </PropertyGroup>
+
+
+  <!-- 
+    Execute 'DocFx serve' after successful build of docs.
+    This has nothing to do with 'DhyMik.DocFx.UpdateDocFxVersionAttributeTask',
+    this is a plain call to 'docFx.exe serve' and displayed
+    here just as an example:
+    -->
+
+  <PropertyGroup>
+
+    <!-- Adjust this to specify your doc sites folder. DocFx default is '_site' -->
+    <DocSiteFolder>doc</DocSiteFolder>
+    <!-- Adjust this to specify the port number to serve the doc site on. Default is 8080. -->
+    <DocSiteServingPort>8080\</DocSiteServingPort>
+
+  </PropertyGroup>
+
+  <!--
+      If you want to run DocFx serve automatically after build,
+      uncomment the following section:
+    -->
+  <!--
+  <Target Name="DocServe" Condition="'$(BuildDocFx)' == 'true'" AfterTargets="DocBuild">
+    <Exec Command="start cmd /c &quot;&quot;$(BuildDocToolPath)&quot; serve &quot;$(DocSitDocSiteFoldereServingPort)&quot; -p $(DocSiteServingPort)" />
+  </Target>
+  -->
+
+</Project>
