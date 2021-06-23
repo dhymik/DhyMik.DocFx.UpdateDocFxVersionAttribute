@@ -70,8 +70,6 @@ Example footer:
 
 See the fully working example [here](#example).
 
-#### License
-This project is published under MIT license, see [here](#license).
 #### Compatibility
 This project is a NetStandard 2.0 project. It runs as part of the MS build process.
 
@@ -101,15 +99,19 @@ to tell `UpdateDocFxVersionAttributeTask` where to find `docfx.json`.
 Install `UpdateDocFxVersionAttributeTask` from Nuget into the project which produces
 the dll that contains the relevant version information.
 
-Then add the following markup to the project file,
+Then add the following markup to the project file inside of the `<Project>` tag,
 or to a `directory.build.targets` file in or above the project dir, and adjust
 the value for the `UpdateDocFxVersionAttributeTask_DocFxJsonPath` attribute:
 
 ````xml
-<PropertyGroup>
-  <!-- 'UpdateDocFxVersionAttributeTask_DocFxJsonPath' can be overridden. Default is 'docfx.json' -->
-  <UpdateDocFxVersionAttributeTask_DocFxJsonPath>..\..\MySeparateDocFxProject\docfx.json</UpdateDocFxVersionAttributeTask_DocFxJsonPath>
-</PropertyGroup>
+<Project>
+
+  <PropertyGroup>
+    <!-- 'UpdateDocFxVersionAttributeTask_DocFxJsonPath' can be overridden. Default is 'docfx.json' -->
+    <UpdateDocFxVersionAttributeTask_DocFxJsonPath>..\..\MySeparateDocFxProject\docfx.json</UpdateDocFxVersionAttributeTask_DocFxJsonPath>
+  </PropertyGroup>
+
+</Project>
 ````
 Now the updated value for `UpdateDocFxVersionAttributeTask_DocFxJsonPath` will be used
 and the specified DocFx configuration file will be updated.
@@ -282,15 +284,19 @@ Footer:
 #### Updating a docfx.json file which is not in the project root
 
 If the `docfx.json` file to be updated is not found in the project's root directory,
-add the following markup to the project file, or to a `directory.build.targets` file
+add the following markup to the project file inside of the `<Project>` tag, or to a `directory.build.targets` file
 in or above the project dir, and adjust the value for the
 `UpdateDocFxVersionAttributeTask_DocFxJsonPath` attribute:
 
 ````xml
-<PropertyGroup>
-  <!-- 'UpdateDocFxVersionAttributeTask_DocFxJsonPath' can be overridden. Default is 'docfx.json' -->
-  <UpdateDocFxVersionAttributeTask_DocFxJsonPath>..\..\MySeparateDocFxProject\docfx.json</UpdateDocFxVersionAttributeTask_DocFxJsonPath>
-</PropertyGroup>
+<Project>
+
+  <PropertyGroup>
+    <!-- 'UpdateDocFxVersionAttributeTask_DocFxJsonPath' can be overridden. Default is 'docfx.json' -->
+    <UpdateDocFxVersionAttributeTask_DocFxJsonPath>..\..\MySeparateDocFxProject\docfx.json</UpdateDocFxVersionAttributeTask_DocFxJsonPath>
+  </PropertyGroup>
+
+</Project>
 ````
 Now the updated value for `UpdateDocFxVersionAttributeTask_DocFxJsonPath`will be used
 and the specified DocFx configuration file will be updated.
@@ -306,15 +312,41 @@ to extract the `InformalVersion` attribute value, which is then added to the
 If another file's `InformalVersion` attribute should be the source, it is possible
 to override this behavior.
 
-For this, add the following markup to the project file, or to a `directory.build.targets`
+For this, add the following markup to the project file inside of the `<Project>` tag, or to a `directory.build.targets`
 file in or above the project dir:
 
 ````xml
-<PropertyGroup>
-  <!-- 'UpdateDocFxVersionAttributeTask_DllPath' can be overridden. Default is currently built dll -->
-  <UpdateDocFxVersionAttributeTask_DllPath>bin\release\myApp.dll</UpdateDocFxVersionAttributeTask_DllPath>
-</PropertyGroup>
+<Project>
+  
+  <PropertyGroup>
+    <!-- 'UpdateDocFxVersionAttributeTask_DllPath' can be overridden. Default is currently built dll -->
+    <UpdateDocFxVersionAttributeTask_DllPath>bin\release\myApp.dll</UpdateDocFxVersionAttributeTask_DllPath>
+  </PropertyGroup>
+
+</Project>
 ````
+
+### Running `DocFx serve` automatically after a successful build
+
+To run `DocFx serve` automatically after a successful build of the documentation, add the following markup to the project file, or to a `directory.build.targets` file in or above the project dir:
+
+````xml
+<Project>
+
+  <PropertyGroup>
+    <!-- Adjust this to specify your doc sites folder. DocFx default is '_site' -->
+    <DocSiteFolder>_site</DocSiteFolder>
+    <!-- Adjust this to specify the port number to serve the doc site on. Default is 8080. -->
+    <DocSiteServingPort>8080</DocSiteServingPort>
+  </PropertyGroup>
+
+  <Target Name="DocServe" Condition="'$(BuildDocFx)' == 'true'" AfterTargets="DocBuild">
+    <Exec Command="powershell start-process -FilePath docfx -ArgumentList  &apos;serve  &quot;$(ProjectDir)$(DocSiteFolder)&quot; -p $(DocSiteServingPort)&apos;" />
+  </Target>
+
+</Project>
+````
+This code, along with a few other examples, is included in the [example.directory.build.targets](doc/example.directory.build.targets) file in the [doc folder](doc).
 
 ### Logging
 
@@ -327,11 +359,11 @@ To search the log output for log information from this build task, search for `-
 
 <a name="license" />
 
-### License & Disclaimer
+### Copyright, License & Disclaimer
 
-MIT License
+Copyright © by Mikael Axel Kleinwort (DhyMik)
 
-Copyright (c) 2021 Mikael Axel Kleinwort (DhyMik)
+This is free software and is licensed under the [The MIT License (MIT)](http://opensource.org/licenses/MIT):
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -359,7 +391,7 @@ This repository includes a few files as examples (see [doc folder](doc)):
  This is the targets file added to the project's build process.
 - [example.directory.build.targets](doc/example.directory.build.targets)  
  This is an example `directory.build.targets` file with lots of comments. If you want to use this file, rename it to `directory.build.targets` and place it in the project's root directory or any directory above.  
- This file also includes an example of how to have DocFx automatically serve the built documentation site locally on a given port.
+ This file also includes an example of how to have DocFx automatically serve the built documentation site locally on a given port after a successful build.
 - The modified files for adding the version link to DocFx markup. The file examples are based on DocFx **default template**:  
  [navbar.tmpl.partial](doc/navbar.tmpl.partial)  
  [footer.tmpl.partial](doc/footer.tmpl.partial)  

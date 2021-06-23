@@ -36,29 +36,31 @@
   </PropertyGroup>
 
 
-  <!-- 
-    Execute 'DocFx serve' after successful build of docs.
-    This has nothing to do with 'DhyMik.DocFx.UpdateDocFxVersionAttributeTask',
-    this is a plain call to 'docFx.exe serve' and displayed
-    here just as an example:
+    <!-- 
+    Execute 'DocFx serve' only after successful build of docs.
+    This has nothing to do with 'UpdateDocFxVersionAttributeTask',
+    this is a plain call to 'docFx.exe serve' wrapped in a target.
+    It is displayed here as an example of how to serve the docs after build.
+    
+    The target opens a command window but is not blocking the build process.
     -->
 
   <PropertyGroup>
 
     <!-- Adjust this to specify your doc sites folder. DocFx default is '_site' -->
-    <DocSiteFolder>doc</DocSiteFolder>
+    <DocSiteFolder>_site</DocSiteFolder>
     <!-- Adjust this to specify the port number to serve the doc site on. Default is 8080. -->
-    <DocSiteServingPort>8080\</DocSiteServingPort>
+    <DocSiteServingPort>8080</DocSiteServingPort>
 
   </PropertyGroup>
 
   <!--
-      If you want to run DocFx serve automatically after build,
+      If you want to run 'DocFx serve' automatically after build,
       uncomment the following section:
     -->
   <!--
   <Target Name="DocServe" Condition="'$(BuildDocFx)' == 'true'" AfterTargets="DocBuild">
-    <Exec Command="start cmd /c &quot;&quot;$(BuildDocToolPath)&quot; serve &quot;$(DocSitDocSiteFoldereServingPort)&quot; -p $(DocSiteServingPort)" />
+    <Exec Command="powershell start-process -FilePath docfx -ArgumentList  &apos;serve  &quot;$(ProjectDir)$(DocSiteFolder)&quot; -p $(DocSiteServingPort)&apos;" />
   </Target>
   -->
 
