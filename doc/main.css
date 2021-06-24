@@ -1,7 +1,47 @@
-﻿.version.versionHeader {
-  display: inline-block;
-  line-height: 20px;
-  padding: 15px 30px 15px 30px; }
+﻿@import "globalMetadataVariables.css";
+
+/* Style the version links in header & footer:
+ */
+.version.versionHeader {
+    display: inline-block;
+    line-height: 20px;
+    padding: 15px 30px 15px 30px;
+}
 
 .version.versionFooter {
-  padding-right: 30px; }
+    padding-right: 30px;
+}
+
+
+/* styles to include app title next to breadcrumnb under logo:
+ */
+.breadcrumb::before {
+    content: var(--_appTitle) ":";
+    padding-right: 20px;
+}
+
+
+/* Fix scroll to anchor behavior for tablet and desktop,
+    so scroll target is not hidden by floating nav bar
+ */
+@media only screen and (min-width: 769px) {
+    .article a[name] {
+        /* move anchor up 75px so page scrolls further down */
+        position: absolute;
+        top: -75px;
+    }
+
+    p {
+        /* <p> must have ' position: relative' in order to make 
+     * 'position: absolute' of the preceeding rule work
+     */
+        position: relative;
+    }
+}
+
+/* Improve blockquote style: original font-size too large
+ */
+blockquote {
+    font-size: 1.03em;
+    background-color: rgb(250, 250, 246);
+}

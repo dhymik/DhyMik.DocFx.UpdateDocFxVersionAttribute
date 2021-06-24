@@ -1,11 +1,14 @@
 ﻿using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace DhyMik.DocFx
 {
@@ -16,6 +19,11 @@ namespace DhyMik.DocFx
     /// </summary>
     public class UpdateDocFxVersionAttributeTask : Task
     {
+        /// <summary>
+        /// File name for generation of GlobalMetadata css variables
+        /// </summary>
+        private const string cssFileName = "globalMetadataVariables.css";
+
         /// <summary>
         /// The dll from which to take the version information
         /// </summary>
@@ -102,7 +110,7 @@ namespace DhyMik.DocFx
                     importance: MessageImportance.Normal,
                     $"{_logPrefix}Dll informal version and '_DocumentationVersion' attribute " +
                     $"in '{_docFxJsonPath}' are equal. Current value is '{currentVersionInDocFxJson}'. " +
-                    "Nothing to do.");
+                    "No need to update docfx.json.");
             }
             else
             {
@@ -124,6 +132,67 @@ namespace DhyMik.DocFx
                        importance: MessageImportance.Normal,
                        $"{_logPrefix}Updated '_DocumentationVersion' attribute in " +
                        $"'{_docFxJsonPath}' to '{dllInformalVersion}'.");
+                }
+            }
+
+            /*
+             * 
+             * Write css file with generated globalMetadata css variabes
+             * 
+             * */
+
+            // extract attributesd from the updated 'jsonObj'
+            var attributes = (Dictionary<string, string>)JsonConvert.DeserializeObject<Dictionary<string, string>>(Convert.ToString(jsonObj.build.globalMetadata));
+            var templates = (string[])JsonConvert.DeserializeObject<string[]>(Convert.ToString(jsonObj.build.template));
+
+            // default output path is just the file name
+            // (save in project root if no template path is found later)
+            var outputFile = cssFileName;
+
+            if (attributes == null || attributes.Count == 0)
+            {
+                Log.LogMessage(
+                   importance: MessageImportance.Normal,
+                   $"{_logPrefix}No 'globalMetadata' attributes found in ' docfx.json'. " +
+                   $"Skipping generation of '{cssFileName}'.");
+            }
+            else
+            {
+                if(templates != null && templates.Length != 0)
+                {
+                    // if template attribute contains template paths,
+                    // use the last item as a path to the template
+                    // and point the output path to its 'styles' subfolder
+                    outputFile =
+                        (templates[templates.Length - 1] + "/styles/" + cssFileName)
+                        .Replace("\\", "/")
+                        .Replace("//", "/");
+                }
+
+                var css = new StringBuilder();
+
+                css.Append("/*\n * This file was created by DhyMik.DocFx.UpdateDocFxVersionAttributeTask.\n *\n");
+                css.Append(" * Do not change this file - changes will be overwritten on next build.\n *\n");
+                css.Append(" * This file is based on data from 'globalMetadata' section in docfx.json.\n");
+                css.Append(" * Edit 'globalMetadata' section of docfx.json instead of changing this file.\n");
+                css.Append(" */\n");
+
+                // convert the attributes to css and append
+                css.Append(attributes.ExtractToCss());
+
+                // try to write the css file
+                try
+                {
+                    File.WriteAllText(outputFile, css.ToString());
+
+                    Log.LogMessage(
+                       importance: MessageImportance.Normal,
+                       $"{_logPrefix}Css file {outputFile} written with {attributes.Count} css variable declarations.");
+                }
+                catch (Exception)
+                {
+                    Log.LogError($"{_logPrefix}Error writing css file '{outputFile}'");
+                    throw;
                 }
             }
 
