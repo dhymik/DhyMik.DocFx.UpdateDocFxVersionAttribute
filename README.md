@@ -272,7 +272,7 @@ in the DocFx template folder's `partial` folder.
 In `footer.tmpl.partial`, add the following line right before the last opening `<span>` tag:
 
 ````html
-<a class="version versionFooter" href="{{{_DocumentationVersionFilePath}}}.html" title="{{{_DocumentationVersionHint}}}">Version {{{_DocumentationVersion}}}</a>
+<a class="version versionFooter" href="{{{_DocumentationVersionFilePath}}}" title="{{{_DocumentationVersionHint}}}">Version {{{_DocumentationVersion}}}</a>
 ```` 
 
 The [complete file](doc/footer.tmpl.partial) can be found in the [doc folder](doc) and will look like this:
@@ -290,7 +290,7 @@ The [complete file](doc/footer.tmpl.partial) can be found in the [doc folder](do
       </span>
 
       // added version link:
-      <a class="version versionFooter" href="{{{_DocumentationVersionFilePath}}}.html" title="{{{_DocumentationVersionHint}}}">Version {{{_DocumentationVersion}}}</a>
+      <a class="version versionFooter" href="{{{_DocumentationVersionFilePath}}}" title="{{{_DocumentationVersionHint}}}">Version {{{_DocumentationVersion}}}</a>
 
       <span>
       {{{_appFooter}}}

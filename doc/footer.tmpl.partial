@@ -11,7 +11,7 @@
       </span>
 
       // added version link:
-      <a class="version versionFooter" href="{{{_DocumentationVersionFilePath}}}.html" title="{{{_DocumentationVersionHint}}}">Version {{{_DocumentationVersion}}}</a>
+      <a class="version versionFooter" href="{{{_DocumentationVersionFilePath}}}" title="{{{_DocumentationVersionHint}}}">Version {{{_DocumentationVersion}}}</a>
 
       <span>
       {{{_appFooter}}}
